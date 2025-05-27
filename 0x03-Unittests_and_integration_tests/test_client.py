@@ -97,15 +97,13 @@ class TestGithubOrgClient(unittest.TestCase):
         """Test that has_license returns correct bool based on license key."""
         self.assertEqual(GithubOrgClient.has_license(repo, license_key), expected)
 
-
 import unittest
 from unittest.mock import patch, MagicMock
 from parameterized import parameterized_class
 from client import GithubOrgClient
 from fixtures import org_payload, repos_payload, expected_repos, apache2_repos
 
-@parametrized_class = parameterized_class
-@parametrized_class([
+@parameterized_class([
     {
         "org_payload": org_payload,
         "repos_payload": repos_payload,
