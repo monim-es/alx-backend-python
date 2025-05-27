@@ -128,3 +128,37 @@ class TestGithubOrgClient(unittest.TestCase):
         mock_get_json.assert_called_once_with(f"https://api.github.com/orgs/{org_name}")
 
 
+
+#!/usr/bin/env python3
+import unittest
+from unittest.mock import patch
+from utils import memoize
+
+class TestMemoize(unittest.TestCase):
+    """Test case for the memoize decorator."""
+
+    def test_memoize(self):
+        """Test that a_method is called once and the result is cached."""
+
+        class TestClass:
+            def a_method(self):
+                return 42
+
+            @memoize
+            def a_property(self):
+                return self.a_method()
+
+        test_obj = TestClass()
+
+        with patch.object(TestClass, 'a_method', return_value=42) as mock_method:
+            # Call a_property twice
+            result1 = test_obj.a_property
+            result2 = test_obj.a_property
+
+            # Both calls should return 42
+            self.assertEqual(result1, 42)
+            self.assertEqual(result2, 42)
+
+            # a_method should be called only once due to memoization
+            mock_method.assert_called_once()
+
