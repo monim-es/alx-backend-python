@@ -158,3 +158,14 @@ class MockResponse:
 
     def json(self):
         return self._json_data
+
+
+
+def test_public_repos(self):
+    """Integration test for public_repos"""
+    self.assertEqual(self.client.public_repos(), self.expected_repos)
+
+def test_public_repos_with_license(self):
+    """Integration test for public_repos filtering by license"""
+    self.assertEqual(self.client.public_repos(license="apache-2.0"), self.apache2_repos)
+
