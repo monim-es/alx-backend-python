@@ -10,6 +10,7 @@ class User(AbstractUser):
     user_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     email = models.EmailField(unique=True)
     phone_number = models.CharField(max_length=15, null=True, blank=True)
+    password = models.CharField(max_length=128) 
     profile_pic = models.ImageField(upload_to='profiles/', null=True, blank=True)
 
     REQUIRED_FIELDS = ['email', 'first_name', 'last_name']
