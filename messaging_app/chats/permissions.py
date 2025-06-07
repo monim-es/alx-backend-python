@@ -2,7 +2,7 @@ from rest_framework.permissions import BasePermission
 from .models import Conversation
 # "from rest_framework import permissions"
 
-
+#["PUT", "PATCH", "DELETE"]
 
 class IsParticipantOfConversation(BasePermission):
     def has_permission(self, request, view):

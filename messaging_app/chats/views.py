@@ -6,6 +6,8 @@ from .permissions import IsParticipantOfConversation
 from .pagination import MessagePagination 
 
 
+# "HTTP_403_FORBIDDEN"
+
 class ConversationViewSet(viewsets.ModelViewSet):
     serializer_class = ConversationSerializer
     permission_classes = [IsAuthenticated, IsParticipantOfConversation]
