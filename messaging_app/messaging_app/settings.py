@@ -148,3 +148,5 @@ SIMPLE_JWT = {
     'BLACKLIST_AFTER_ROTATION': True,
     'AUTH_HEADER_TYPES': ('Bearer',),
 }
+
+# ["rest_framework.authentication.BasicAuthentication", "rest_framework.authentication.SessionAuthentication"]

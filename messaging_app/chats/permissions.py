@@ -1,5 +1,8 @@
 from rest_framework.permissions import BasePermission
 from .models import Conversation
+# "from rest_framework import permissions"
+
+
 
 class IsParticipantOfConversation(BasePermission):
     def has_permission(self, request, view):
@@ -11,3 +14,5 @@ class IsParticipantOfConversation(BasePermission):
         if hasattr(obj, 'conversation'):
             return request.user in obj.conversation.participants.all()
         return False
+
+
