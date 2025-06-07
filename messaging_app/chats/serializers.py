@@ -2,34 +2,33 @@ from rest_framework import serializers
 from .models import User, Conversation, Message
 
 class UserSerializer(serializers.ModelSerializer):
-    phone_number = serializers.CharField(required=False, allow_blank=True)
-
     class Meta:
         model = User
-        fields = ['user_id', 'username', 'email', 'first_name', 'last_name', 'phone_number']
+        fields = ['id', 'username', 'email', 'first_name', 'last_name', 'phone_number', 'profile_pic']
 
 class MessageSerializer(serializers.ModelSerializer):
     sender = UserSerializer(read_only=True)
-    message_body = serializers.CharField()
 
     class Meta:
         model = Message
         fields = ['message_id', 'message_body', 'sent_at', 'sender']
 
 class ConversationSerializer(serializers.ModelSerializer):
-    users = UserSerializer(many=True, read_only=True)
+    participants = UserSerializer(many=True, read_only=True)
     messages = serializers.SerializerMethodField()
 
     class Meta:
         model = Conversation
-        fields = ['conversation_id', 'users', 'messages']
+        fields = ['conversation_id', 'participants', 'messages']
 
     def get_messages(self, obj):
-        messages = obj.message_set.all().order_by('sent_at')
-        return MessageSerializer(messages, many=True).data
+        return MessageSerializer(obj.messages.all().order_by('sent_at'), many=True).data
 
-    def validate(self, data):
-        users = self.initial_data.get('users')
-        if not users or len(users) < 2:
-            raise serializers.ValidationError("A conversation must have at least two users.")
-        return data
+    def create(self, validated_data):
+        participants_usernames = self.initial_data.get("participants", [])
+        users = User.objects.filter(username__in=participants_usernames)
+        if len(users) < 2:
+            raise serializers.ValidationError("At least 2 valid participants required.")
+        conversation = Conversation.objects.create()
+        conversation.participants.set(users)
+        return conversation
