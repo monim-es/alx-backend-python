@@ -1,0 +1,59 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.swp
+*.swo
+
+# Django
+*.log
+*.pot
+*.pyc
+*.sqlite3
+db.sqlite3
+*.db
+.env
+.env.*
+
+# VSCode / IDEs
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Migrations
+**/migrations/
+!**/migrations/__init__.py
+
+# Static files
+/staticfiles/
+/media/
+
+# Pipenv/Poetry
+Pipfile.lock
+poetry.lock
+
+# Compiled
+*.egg
+*.egg-info/
+dist/
+build/
+
+# Coverage & testing
+htmlcov/
+.tox/
+.coverage
+coverage.xml
+.pytest_cache/
+nosetests.xml
+test.db
+junit.xml
+
+# Docker
+*.pid
+
+# Git
+*.orig
