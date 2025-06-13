@@ -1,10 +1,5 @@
 from django.db import models
 from django.contrib.auth.models import User
-from .managers import UnreadMessagesManager
-
-
-
-
 
 class Message(models.Model):
     sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sent_messages')
@@ -22,20 +17,10 @@ class Message(models.Model):
         on_delete=models.CASCADE,
         related_name='replies'
     )
-    objects = models.Manager()  # Default manager
-    unread = UnreadMessagesManager()  # Custom manager
 
     def __str__(self):
         return f"{self.sender.username} ➜ {self.receiver.username}: {self.content[:30]}"
 
-class Notification(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='notifications')
-    message = models.ForeignKey(Message, on_delete=models.CASCADE)
-    is_read = models.BooleanField(default=False)
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f"Notification for {self.user.username}"
 
 
 class MessageHistory(models.Model):
