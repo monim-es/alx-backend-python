@@ -14,3 +14,4 @@ def delete_user(request):
 
 
 # sender=request.user  receiver
+# Message.unread.unread_for_user.only
