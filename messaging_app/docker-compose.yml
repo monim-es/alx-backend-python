@@ -50,5 +50,5 @@ networks:
 
 
   # python3 manage.py runserver
-  # "MYSQL_DB"
+  # "MYSQL_DB"  MYSQL_DB
     driver: bridge
