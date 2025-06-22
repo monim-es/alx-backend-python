@@ -46,4 +46,9 @@ volumes:
 
 networks:
   messaging_network:
+
+
+
+
+  # "MYSQL_DB"
     driver: bridge
