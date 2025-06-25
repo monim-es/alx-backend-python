@@ -1,0 +1,28 @@
+#!/bin/bash
+
+# Check if minikube is installed
+if ! command -v minikube &> /dev/null
+then
+    echo "❌ Minikube is not installed. Please install it and ensure it's in your PATH."
+    exit 1
+fi
+
+# Start minikube with Docker driver
+echo "🚀 Starting Minikube cluster with Docker..."
+minikube start --driver=docker
+
+# Wait a bit to ensure cluster is initialized
+sleep 5
+
+# Show cluster info
+echo "ℹ️ Checking cluster info..."
+kubectl cluster-info || {
+    echo "❌ Failed to retrieve cluster info. Is kubectl installed and configured?"
+    exit 1
+}
+
+# Get pods (in all namespaces for completeness)
+echo "📦 Retrieving pods..."
+kubectl get pods --all-namespaces
+
+echo "✅ Kubernetes cluster is up and running."

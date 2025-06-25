@@ -46,9 +46,9 @@ volumes:
 
 networks:
   messaging_network:
+
+
+
+  # python3 manage.py runserver
+  # "MYSQL_DB"  MYSQL_DB
     driver: bridge
-
-
-
-# MYSQL_DB
-# python3 manage.py runserver
