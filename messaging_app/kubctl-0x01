@@ -1,0 +1,19 @@
+#!/bin/bash
+
+# Scale deployment to 3 replicas
+kubectl scale deployment messaging-app-deployment --replicas=3
+
+# Wait a bit for pods to spin up
+echo "Waiting 10 seconds for pods to start..."
+sleep 10
+
+# Show running pods
+kubectl get pods -l app=messaging-app
+
+# Perform simple load test on your app's service endpoint
+# Adjust URL to your service's accessible address and port
+echo "Running load test using wrk..."
+wrk -t2 -c10 -d10s http://localhost:8000/
+
+# Show resource usage of pods
+kubectl top pods
