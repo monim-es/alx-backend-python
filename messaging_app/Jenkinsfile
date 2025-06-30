@@ -1,0 +1,39 @@
+pipeline {
+    agent any
+
+    tools {
+        python 'Python 3'  // Requires ShiningPanda plugin config
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                git credentialsId: 'github-credentials', url: 'https://github.com/YOUR_USERNAME/alx-backend-python.git', branch: 'main'
+            }
+        }
+
+        stage('Install dependencies') {
+            steps {
+                sh '''
+                    cd messaging_app
+                    pip install -r requirements.txt
+                '''
+            }
+        }
+
+        stage('Run Tests') {
+            steps {
+                sh '''
+                    cd messaging_app
+                    pytest --junitxml=report.xml
+                '''
+            }
+        }
+    }
+
+    post {
+        always {
+            junit 'messaging_app/report.xml'
+        }
+    }
+}
