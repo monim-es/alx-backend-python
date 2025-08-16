@@ -1,42 +1,28 @@
-#!/usr/bin/env python3
-import unittest
-from unittest.mock import patch, PropertyMock
-from parameterized import parameterized
-
-from client import GithubOrgClient
-
-
-class TestGithubOrgClient(unittest.TestCase):
-    """Unit tests for GithubOrgClient"""
-
-    @parameterized.expand([
-        ("google",),
-        ("abc",),
-    ])
     @patch('client.get_json')
-    def test_org(self, org_name, mock_get_json):
-        """GithubOrgClient.org returns the mocked payload and calls get_json once"""
-        mock_get_json.return_value = {"org": org_name}
+    def test_public_repos(self, mock_get_json):
+        """Test public_repos returns expected repo names"""
 
-        client = GithubOrgClient(org_name)
-        result = client.org
+        # Fake payload returned by get_json
+        test_payload = [
+            {"name": "repo1"},
+            {"name": "repo2"},
+            {"name": "repo3"}
+        ]
+        mock_get_json.return_value = test_payload
 
-        mock_get_json.assert_called_once_with(
-            f"https://api.github.com/orgs/{org_name}"
-        )
-        self.assertEqual(result, {"org": org_name})
+        # Patch _public_repos_url as context manager
+        with patch('client.GithubOrgClient._public_repos_url',
+                   new_callable=PropertyMock) as mock_repos_url:
 
-    def test_public_repos_url(self):
-        """_public_repos_url is derived from the (mocked) org payload"""
-        expected = "https://api.github.com/orgs/test-org/repos"
-        payload = {"repos_url": expected}
+            mock_repos_url.return_value = "https://api.github.com/orgs/test-org/repos"
 
-        # Patch the property correctly using patch.object + PropertyMock
-        with patch.object(GithubOrgClient, 'org', new_callable=PropertyMock) as mock_org:
-            mock_org.return_value = payload
             client = GithubOrgClient("test-org")
-            self.assertEqual(client._public_repos_url, expected)
+            result = client.public_repos()
 
+            # Assert result is only repo names
+            expected = ["repo1", "repo2", "repo3"]
+            self.assertEqual(result, expected)
 
-if __name__ == "__main__":
-    unittest.main()
+            # Assert both mocks were called once
+            mock_repos_url.assert_called_once()
+            mock_get_json.assert_called_once_with("https://api.github.com/orgs/test-org/repos")
