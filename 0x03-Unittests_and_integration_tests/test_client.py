@@ -3,16 +3,16 @@
 Test file for client.py
 """
 import unittest
-from unittest.mock import patch
+from unittest.mock import patch, Mock, PropertyMock
 from parameterized import parameterized
-
 from client import GithubOrgClient
+from utils import get_json
 
 class TestGithubOrgClient(unittest.TestCase):
     """
     Test cases for GithubOrgClient
     """
-
+    
     @parameterized.expand([
         ("google",),
         ("abc",),
@@ -23,13 +23,14 @@ class TestGithubOrgClient(unittest.TestCase):
         Test that GithubOrgClient.org returns the correct value
         and that get_json is called once.
         """
-        # Set up the mock's return value
-        mock_get_json.return_value = {"repos_url": f"https://api.github.com/orgs/{org_name}/repos"}
+        mock_payload = {"repos_url": f"https://api.github.com/orgs/{org_name}/repos"}
+        mock_get_json.return_value = mock_payload
 
-        # Instantiate the client and call the method
         client = GithubOrgClient(org_name)
         result = client.org
 
-        # Assertions
+        self.assertEqual(result, mock_payload)
         mock_get_json.assert_called_once_with(f"https://api.github.com/orgs/{org_name}")
-        self.assertEqual(result, {"repos_url": f"https://api.github.com/orgs/{org_name}/repos"})
+
+if __name__ == '__main__':
+    unittest.main()
